@@ -1,13 +1,15 @@
 import apihelper
 
-
 class Comments:
-    def __init__(self, token):
+    def __init__(self, token, owner=None):
         self.token = token
+        self.owner = owner
 
-    def create_post(self, owner_id, type, text=None, photo_url=None,
+    def create_post(self, type, owner_id=None, text=None, photo_url=None,
             caption=None, parse_mode=None, administrators=None, disable_notifications=None):
         method_url = r'createPost'
+        if not owner_id:
+            owner_id = self.owner
         payload = {'owner_id': str(owner_id), 'type': type}
         if text:
             payload['text'] = text
@@ -22,6 +24,7 @@ class Comments:
         if disable_notifications:
             payload['disable_notifications'] = disable_notifications
         return apihelper._make_request(self.token, method_url, payload)
+
     def edit_post(self, post_id, text=None, photo_url=None, caption=None, parse_mode=None):
         method_url = r'editPost'
         payload = {'post_id': post_id}

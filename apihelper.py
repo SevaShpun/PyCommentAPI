@@ -24,15 +24,37 @@ def _make_request(token, method_name, params=None):
         raise CommentsApiException(msg, method_name, result)
 
     if method_name == 'createPost':
-        return request(result_json['result']['post_id'], result_json['result']['link'])
+        return Comments(result_json['result']['post_id'], result_json['result']['link'], token)
 
-    elif method_name in ['editPost', 'deletePost']:
-        return request(params['post_id'], f"https://comments.bot/thread/{params['post_id']}")
+    elif method_name == 'editPost':
+        return Comments(params['post_id'], f"https://comments.bot/thread/{params['post_id']}", token)
 
-class request:
-    def __init__(self, post_id, link):
+    elif method_name == 'deletePost':
+        return result_json['ok']
+        
+class Comments:
+    def __init__(self, post_id, link, token):
         self.id = post_id
         self.link = link
+        self.token = token
+
+    def edit_post(self, text=None, photo_url=None, caption=None, parse_mode=None):
+        method_url = r'editPost'
+        payload = {'post_id': self.id}
+        if text:
+            payload['text'] = text
+        if photo_url:
+            payload['photo_url'] = photo_url
+        if caption:
+            payload['caption'] = caption
+        if parse_mode:
+            payload['parse_mode'] = parse_mode
+        return _make_request(self.token, method_url, payload)
+
+    def delete_post(self):
+        method_url = r'deletePost'
+        payload = {'post_id': self.id}
+        return _make_request(self.token, method_url, payload)
 
 class CommentsApiException(Exception):
     def __init__(self, msg, function_name, result):
