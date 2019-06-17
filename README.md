@@ -18,8 +18,9 @@ $ git clone https://github.com/Feno4ka/PyCommentAPI.git
 ```python
 from PyCommentAPI import Comments
 
-postbot = Comments(TOKEN)
-# or postbot = Comments(token=TOKEN, owner=TELEGRAM_USER_ID)
+postbot = Comments(token=TOKEN, owner=TELEGRAM_USER_ID)
+# or postbot = Comments(TOKEN)
+
 out = '''
 <b>Hi!</b>
 This is the first test of this library!
