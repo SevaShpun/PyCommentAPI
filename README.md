@@ -19,16 +19,25 @@ $ git clone https://github.com/Feno4ka/PyCommentAPI.git
 from PyCommentAPI import Comments
 
 postbot = Comments(TOKEN)
-
+# or postbot = Comments(token=TOKEN, owner=TELEGRAM_USER_ID)
 out = '''
 <b>Hi!</b>
 This is the first test of this library!
 <a href="https://t.me/Fenicu">Fenicu</a>
 '''
 
-post = postbot.create_post(telegram_user_id, 'text', out, parse_mode='HTML')
-
+post = postbot.create_post('text', text=out, parse_mode='HTML')
+# or post = postbot.create_post(owner_id=TELEGRAM_USER_ID, type='text', text=out, parse_mode='HTML')
 print(post.link)
+print(post.id)
+
+out = '''
+<b>Post changed!</b>
+'''
+post.edit_post(text=out, parse_mode='HTML')
+# or post = postbot.edit_post(post.id, out, parse_mode='HTML')
+post.delete_post()
+# or postbot.delete_post(post.id)
 ```
 
 |func|argument(s)|
